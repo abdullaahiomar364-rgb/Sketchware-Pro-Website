@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Uuriye Investment</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+  * {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  body {
+    margin:0; background:#0f172a; color:#eee;
+  }
+  .container {
+    max-width: 420px;
+    margin: 40px auto;
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 0 20px rgba(255 255 255 / 0.1);
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #4ade80;
+  }
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+  }
+  input[type="file"] {
+    padding: 6px 12px;
+  }
+  button {
+    width: 100%;
+    background: #4ade80;
+    border: none;
+    padding: 12px;
+    color: #0f172a;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #22c55e;
+  }
+  .green-badge {
+    background-color: #16a34a;
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    padding: 14px 20px;
+    border-radius: 12px;
+    text-align: center;
+    margin: 20px 0;
+    user-select: none;
+  }
+  .hidden {
+    display: none;
+  }
+  .link-btn {
+    background: transparent;
+    border: none;
+    color: #4ade80;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 8px;
+    text-decoration: underline;
+  }
+  .dashboard-header {
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .balance {
+    font-size: 20px;
+    color: #86efac;
+    margin-bottom: 24px;
+  }
+  .robots-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(130px,1fr));
+    gap: 15px;
+  }
+  .robot {
+    background: #334155;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    color: #a5b4fc;
+    position: relative;
+  }
+  .robot h4 {
+    margin: 6px 0;
+    color: #facc15;
+  }
+  .robot .price,
+  .robot .profit {
+    font-size: 14px;
+    margin: 2px 0;
+  }
+  .robot button {
+    margin-top: 8px;
+    background: #22c55e;
+    padding: 8px 10px;
+    font-size: 16px;
+    color: #0f172a;
+  }
+  .robot button:disabled {
+    background: #6b7280;
+    cursor: not-allowed;
+  }
+  .active-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #22c55e;
+    color: #0f172a;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .timer {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #bbf7d0;
+  }
+  nav {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  nav button {
+    background: #2563eb;
+    color: white;
+    font-weight: 700;
+  }
+  nav button:hover {
+    background: #1d4ed8;
+  }
+  .form-section {
+    margin-top: 20px;
+  }
+  .whatsapp-link {
+    color: #22c55e;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .message-area {
+    background: #065f46;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 12px;
+    font-size: 16px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="app">
+
+  <!-- REGISTER FORM -->
+  <div id="register-section">
+    <h2>Register</h2>
+    <input type="text" id="register-number" placeholder="Number (e.g. 618877686)" maxlength="15" />
+    <input type="password" id="register-password" placeholder="Password" />
+    <input type="password" id="register-password-confirm" placeholder="Confirm Password" />
+    <button id="register-btn">Register</button>
+    <button class="link-btn" id="to-login">Already have account? Login</button>
+  </div>
+
+  <!-- REGISTER SUCCESS MESSAGE -->
+  <div id="register-success" class="green-badge hidden">
+    Akoona.ayaad sameysatay. Mahadsanid!
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div id="login-section" class="hidden">
+    <h2>Login</h2>
+    <input type="text" id="login-number" placeholder="Number" maxlength="15" />
+    <input type="password" id="login-password" placeholder="Password" />
+    <button id="login-btn">Login</button>
+    <button class="link-btn" id="to-register">Ma haysaa akoon? Register</button>
+  </div>
+
+  <!-- LOGIN SUCCESS MESSAGE -->
+  <div id="login-success" class="green-badge hidden">
+    Waxaad soo gashay akoonkaaga, soo dhawoow!
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard-section" class="hidden">
+    <div class="dashboard-header">
+      <h2>Dashboard</h2>
+      <div class="balance" id="balance-display">Balance: $0.00</div>
+    </div>
+
+    <div class="robots-container" id="robots-container">
+      <!-- Robots list here -->
+    </div>
+
+    <nav>
+      <button id="deposit-btn">Deposit</button>
+      <button id="withdraw-btn">Withdraw</button>
+      <button id="ussd-btn">USSD</button>
+      <button id="whatsapp-btn">WhatsApp</button>
+      <button id="logout-btn" style="background:#ef4444;">Logout</button>
+    </nav>
+
+    <!-- Deposit form -->
+    <div id="deposit-section" class="form-section hidden">
+      <h3>Deposit</h3>
+      <input type="number" id="deposit-amount" placeholder="Amount ($)" min="1" />
+      <input type="text" id="deposit-number" placeholder="Number (618877686)" maxlength="15" />
+      <input type="text" id="deposit-evc-crypto" placeholder="EVCPlus / Crypto Address" />
+      <input type="file" id="deposit-screenshot" accept="image/*" />
+      <button id="deposit-confirm-btn">Confirm Deposit</button>
+    </div>
+
+    <!-- Withdraw form -->
+    <div id="withdraw-section" class="form-section hidden">
+      <h3>Withdraw</h3>
+      <input type="number" id="withdraw-amount" placeholder="Amount ($)" min="1" />
+      <input type="text" id="withdraw-number" placeholder="Number (618877686)" maxlength="15" />
+      <input type="text" id="withdraw-evc-crypto" placeholder="EVCPlus / Crypto Address" />
+      <button id="withdraw-confirm-btn">Confirm Withdraw</button>
+    </div>
+
+    <!-- USSD section -->
+    <div id="ussd-section" class="form-section hidden">
+      <h3>USSD</h3>
+      <input type="number" id="ussd-amount" placeholder="Amount" min="1" />
+      <button id="ussd-send-btn">Send USSD</button>
+    </div>
+
+  </div>
+
+</div>
+
+<audio id="deep-music" src="https://cdn.pixabay.com/download/audio/2022/03/28/audio_5ce26c2a1d.mp3?filename=soft-piano-11209.mp3" loop></audio>
+
+<script>
+  // Variables
+  const app = document.getElementById('app');
+
+  // Sections
+  const registerSection = document.getElementById('register-section');
+  const registerSuccess = document.getElementById('register-success');
+  const loginSection = document.getElementById('login-section');
+  const loginSuccess = document.getElementById('login-success');
+  const dashboardSection = document.getElementById('dashboard-section');
+
+  const balanceDisplay = document.getElementById('balance-display');
+  const robotsContainer = document.getElementById('robots-container');
+
+  const depositSection = document.getElementById('deposit-section');
+  const withdrawSection = document.getElementById('withdraw-section');
+  const ussdSection = document.getElementById('ussd-section');
+
+  // Buttons
+  const registerBtn = document.getElementById('register-btn');
+  const toLoginBtn = document.getElementById('to-login');
+  const loginBtn = document.getElementById('login-btn');
+  const toRegisterBtn = document.getElementById('to-register');
+
+  const depositBtn = document.getElementById('deposit-btn');
+  const withdrawBtn = document.getElementById('withdraw-btn');
+  const ussdBtn = document.getElementById('ussd-btn');
+  const whatsappBtn = document.getElementById('whatsapp-btn');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  const depositConfirmBtn = document.getElementById('deposit-confirm-btn');
+  const withdrawConfirmBtn = document.getElementById('withdraw-confirm-btn');
+  const ussdSendBtn = document.getElementById('ussd-send-btn');
+
+  // Audio
+  const deepMusic = document.getElementById('deep-music');
+
+  // Robot data (25 robots)
+  const robotsData = [];
+  for(let i=1; i<=25; i++){
+    robotsData.push({
+      id: i,
+      name: `Robot ${i}`,
+      price: 5 + i,          // qiimo $6,7,...30
+      profit: 0.1 * i,       // faaido $0.1, $0.2, ..., $2.5
+    });
+  }
+
+  // LocalStorage keys
+  const USERS_KEY = 'uuriye_users';
+  const SESSION_KEY = 'uuriye_session';
+  const BALANCE_KEY = 'uuriye_balance';
+  const RENTED_ROBOTS_KEY = 'uuriye_rented_robots';
+
+  // Load or init users
+  let users = JSON.parse(localStorage.getItem(USERS_KEY)) || {};
+  // Current logged in user number
+  let currentUser = localStorage.getItem(SESSION_KEY) || null;
+  // Balance per user
+  let balances = JSON.parse(localStorage.getItem(BALANCE_KEY)) || {};
+  // Rented robots per user (object with robotId: { startTime, endTime } )
+  let rentedRobots = JSON.parse(localStorage.getItem(RENTED_ROBOTS_KEY)) || {};
+
+  // For timer intervals
+  let robotIntervals = {};
+
+  // Play deep music and disable buttons while playing for 1.5s (prevent spam)
+  function playDeepMusic(){
+    deepMusic.currentTime = 0;
+    deepMusic.play();
+    disableAllButtons(true);
+    setTimeout(() => {
+      disableAllButtons(false);
+    }, 1500);
+  }
+  function disableAllButtons(disable){
+    const buttons = app.querySelectorAll('button');
+    buttons.forEach(btn=>{
+      btn.disabled = disable;
+    });
+  }
+
+  // Show section helper
+  function showSection(...sections){
+    const allSections = [registerSection, registerSuccess, loginSection, loginSuccess, dashboardSection, depositSection, withdrawSection, ussdSection];
+    allSections.forEach(s=> s.classList.add('hidden'));
+    sections.forEach(s=> s.classList.remove('hidden'));
+  }
+
+  // Update balance display
+  function updateBalanceDisplay(){
+    if(currentUser){
+      let bal = balances[currentUser] || 0;
+      balanceDisplay.textContent = `Balance: $${bal.toFixed(2)}`;
+    }
+  }
+
+  // Save all to localStorage
+  function saveAll(){
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    localStorage.setItem(BALANCE_KEY, JSON.stringify(balances));
+    localStorage.setItem(RENTED_ROBOTS_KEY, JSON.stringify(rentedRobots));
+  }
+
+  // Render robots in dashboard
+  function renderRobots(){
+    robotsContainer.innerHTML = '';
+    if(!currentUser) return;
+
+    const userBalance = balances[currentUser] || 0;
+    const userRented = rentedRobots[currentUser] || {};
+
+    robotsData.forEach(robot => {
+      const isActive = userRented[robot.id] && Date.now() < userRented[robot.id].endTime;
+      const remaining = isActive ? userRented[robot.id].endTime - Date.now() : 0;
+
+      const robotDiv = document.createElement('div');
+      robotDiv.className = 'robot';
+
+      if(isActive){
+        const activeBadge = document.createElement('div');
+        activeBadge.className = 'active-badge';
+        activeBadge.textContent = 'ACTIVE';
+        robotDiv.appendChild(activeBadge);
+      }
+
+      const title = document.createElement('h4');
+      title.textContent = robot.name;
+      robotDiv.appendChild(title);
+
+      const priceP = document.createElement('p');
+      priceP.className = 'price';
+      priceP.textContent = `Qiimo: $${robot.price.toFixed(2)}`;
+      robotDiv.appendChild(priceP);
+
+      const profitP = document.createElement('p');
+      profitP.className = 'profit';
+      profitP.textContent = `Faaido: $${robot.profit.toFixed(2)} (24 saac)`;
+      robotDiv.appendChild(profitP);
+
+      // Timer live countdown
+      const timerP = document.createElement('p');
+      timerP.className = 'timer';
+      robotDiv.appendChild(timerP);
+
+      // Rent button
+      const rentBtn = document.createElement('button');
+      rentBtn.textContent = 'Kirayso';
+      if(isActive){
+        rentBtn.disabled = true;
+        timerP.textContent = formatRemainingTime(remaining);
+      } else if(userBalance < robot.price){
+        rentBtn.disabled = true;
+        timerP.textContent = 'Balance ku filan ma laha';
+      } else {
+        timerP.textContent = '';
+      }
+      robotDiv.appendChild(rentBtn);
+
+      rentBtn.addEventListener('click', ()=>{
+        playDeepMusic();
+        rentRobot(robot.id);
+      });
+
+      robotsContainer.appendChild(robotDiv);
+    });
+  }
+
+  // Format ms to h,m,s
+  function formatRemainingTime(ms){
+    if(ms <= 0) return "Dhammaaday";
+    let totalSeconds = Math.floor(ms / 1000);
+    let h = Math.floor(totalSeconds / 3600);
+    let m = Math.floor((totalSeconds % 3600) / 60);
+    let s = totalSeconds % 60;
+    return `Waqtiga Haray: ${h} saac, ${m} min, ${s} sec`;
+  }
+
+  // Rent robot function
+  function rentRobot(robotId){
+    const userBal = balances[currentUser] || 0;
+    const robot = robotsData.find(r => r.id === robotId);
+    if(!robot) return alert('Robot lama helin.');
+
+    if(userBal < robot.price){
+      alert('Balance ku filan ma lihid.');
+      return;
+    }
+
+    // Deduct price
+    balances[currentUser] = userBal - robot.price;
+
+    // Add rented robot with start and end time (24h)
+    const now = Date.now();
+    if(!rentedRobots[currentUser]) rentedRobots[currentUser] = {};
+    rentedRobots[currentUser][robotId] = {
+      startTime: now,
+      endTime: now + 24 * 60 * 60 * 1000
+    };
+
+    saveAll();
+    updateBalanceDisplay();
+    renderRobots();
+    startRobotTimer(robotId);
+
+    alert(`Robotkaadii ${robot.name} waa la kireystay 24 saac. Fadlan sug.`);
+
+  }
+
+  // Start robot countdown timer & payout on finish
+  function startRobotTimer(robotId){
+    if(robotIntervals[robotId]) clearInterval(robotIntervals[robotId]);
+    robotIntervals[robotId] = setInterval(()=>{
+      const robotRent = rentedRobots[currentUser]?.[robotId];
+      if(!robotRent){
+        clearInterval(robotIntervals[robotId]);
+        renderRobots();
+        return;
+      }
+      const now = Date.now();
+      const remaining = robotRent.endTime - now;
+
+      if(remaining <= 0){
+        clearInterval(robotIntervals[robotId]);
+        // Add price + profit to balance
+        const robot = robotsData.find(r => r.id === robotId);
+        if(robot){
+          balances[currentUser] = (balances[currentUser] || 0) + robot.price + robot.profit;
+          alert(`Robotkaadii ${robot.name} shaqada waa uu dhameeyay, lacagta iyo faa'idada ayaa lagu daray balance-kaaga. Dalbo mid kale!`);
+          delete rentedRobots[currentUser][robotId];
+          saveAll();
+          updateBalanceDisplay();
+          renderRobots();
+        }
+      } else {
+        // Update timer display live
+        renderRobots(); // Because timerP is per robot, simpler to rerender
+      }
+    }, 1000);
+  }
+
+  // On page load, start timers for all active rented robots
+  function startAllTimers(){
+    if(!currentUser) return;
+    const userRented = rentedRobots[currentUser] || {};
+    for(const robotIdStr in userRented){
+      const robotRent = userRented[robotIdStr];
+      if(robotRent.endTime > Date.now()){
+        startRobotTimer(parseInt(robotIdStr));
+      } else {
+        // expired robot payout
+        const robotId = parseInt(robotIdStr);
+        const robot = robotsData.find(r => r.id === robotId);
+        if(robot){
+          balances[currentUser] = (balances[currentUser] || 0) + robot.price + robot.profit;
+          delete rentedRobots[currentUser][robotIdStr];
+          alert(`Robotkaadii ${robot.name} shaqada waa uu dhameeyay, lacagta iyo faa'idada ayaa lagu daray balance-kaaga. Dalbo mid kale!`);
+          saveAll();
+          updateBalanceDisplay();
+        }
+      }
+    }
+    renderRobots();
+  }
+
+  // Register
+  registerBtn.addEventListener('click', ()=>{
+    playDeepMusic();
+    const number = document.getElementById('register-number').value.trim();
+    const password = document.getElementById('register-password').value;
+    const passwordConfirm = document.getElementById('register-password-confirm').value;
+
+    if(!number) return alert('Fadlan geli numberkaaga.');
+    if(!password) return alert('Fadlan geli password.');
+    if(password !== passwordConfirm) return alert('Password iyo confirm password waa inay is waafaqaan.');
+    if(users[number]) return alert('Userkan numberkiisu horey buu u diiwaangashanaa.');
+
+    // Save user
+    users[number] = { password };
+    balances[number] = 0;
+    rentedRobots[number] = {};
+    saveAll();
+
+    showSection(registerSuccess);
+    setTimeout(()=>{
+      showSection(loginSection);
+    }, 2500);
+  });
+
+  // Switch to login
+  toLoginBtn.addEventListener('click', ()=>{
+    showSection(loginSection);
+  });
+
+  // Switch to register
+  toRegisterBtn.addEventListener('click', ()=>{
+    showSection(registerSection);
+  });
+
+  // Login
+  loginBtn.addEventListener('click', ()=>{
+    playDeepMusic();
+    const number = document.getElementById('login-number').value.trim();
+    const password = document.getElementById('login-password').value;
+    if(!number) return alert('Fadlan geli numberkaaga.');
+    if(!password) return alert('Fadlan geli password.');
+
+    if(!users[number] || users[number].password !== password){
+      return alert('Numberka ama password-ka waa khalad.');
+    }
+
+    currentUser = number;
+    localStorage.setItem(SESSION_KEY, currentUser);
+
+    showSection(loginSuccess);
+    updateBalanceDisplay();
+
+    setTimeout(()=>{
+      showSection(dashboardSection);
+      startAllTimers();
+      renderRobots();
+    }, 2000);
+  });
+
+  // Deposit button open form
+  depositBtn.addEventListener('click', ()=>{
+    playDeepMusic();
+    depositSection.classList.remove('hidden');
+    withdrawSection.classList.add('hidden');
+    ussdSection.classList.add('hidden');
+  });
+
+  // Withdraw button open form
+  withdrawBtn.addEventListener('click', ()=>{
+    playDeepMusic();
+    withdrawSection.classList.remove('hidden');
+    depositSection.classList.add('hidden');
+    ussdSection.classList.add('hidden');
+  });
+
+  // USSD button open form
+  ussdBtn.addEventListener('click', ()=>{
+    playDeepMusic();
+    ussdSection.classList.remove('hidden');
+    depositSection.classList.add('hidden');
+    withdrawSection.classList.add('hidden');
+  });
+
+  // WhatsApp button open WhatsApp chat
+  whatsappBtn.addEventListener('click', ()=>{
+    playDeepMusic();
+    const phone = '618877686';
+    const url = `https://wa.me/${phone}`;
+    window.open(url, '_blank');
+  });
+
+  // Logout
+  logoutBtn.addEventListener('click', ()=>{
+    playDeepMusic();
+    currentUser = null;
+    localStorage.removeItem(SESSION_KEY);
+    showSection(loginSection);
+  });
+
+  // Deposit confirm
+  depositConfirmBtn.addEventListener('click', ()=>{
+    playDeepMusic();
+    const amount = parseFloat(document.getElementById('deposit-amount').value);
+    const number = document.getElementById('deposit-number').value.trim();
+    const evcCrypto = document.getElementById('deposit-evc-crypto').value.trim();
+    const screenshot = document.getElementById('deposit-screenshot').files[0];
+
+    if(isNaN(amount) || amount <= 0) return alert('Fadlan geli lacag sax ah.');
+    if(!number) return alert('Fadlan geli numberka.');
+    if(!evcCrypto) return alert('Fadlan geli EVCPlus ama Crypto address.');
+    if(!screenshot) return alert('Fadlan soo geli screenshot.');
+
+
+    // Whatsapp message
+    const waPhone = '618877686';
+    const waText = encodeURIComponent(`Waxaan soo maalgashaday $${amount} waxaana kasoo diray ${number} ama ${evcCrypto}`);
+
+    // Increase balance (simulate approval)
+    balances[currentUser] = (balances[currentUser] || 0) + amount;
+    saveAll();
+    updateBalanceDisplay();
+
+    // Open WhatsApp with message
+    window.open(`https://wa.me/${waPhone}?text=${waText}`, '_blank');
+
+    alert('Deposit waa la diiwaangeliyey, fadlan sug xaqiijinta.');
+
+    // Hide deposit form
+    depositSection.classList.add('hidden');
+
+    // Clear inputs
+    document.getElementById('deposit-amount').value = '';
+    document.getElementById('deposit-number').value = '';
+    document.getElementById('deposit-evc-crypto').value = '';
+    document.getElementById('deposit-screenshot').value = null;
+  });
+
+  // Withdraw confirm
+  withdrawConfirmBtn.addEventListener('click', ()=>{
+    playDeepMusic();
+    const amount = parseFloat(document.getElementById('withdraw-amount').value);
+    const number = document.getElementById('withdraw-number').value.trim();
+    const evcCrypto = document.getElementById('withdraw-evc-crypto').value.trim();
+
+    if(isNaN(amount) || amount <= 0) return alert('Fadlan geli lacag sax ah.');
+    if(!number) return alert('Fadlan geli numberka.');
+    if(!evcCrypto) return alert('Fadlan geli EVCPlus ama Crypto address.');
+
+    if((balances[currentUser] || 0) < amount){
+      return alert('Balance-kaaga kuma filna lacagta aad codsanayso.');
+    }
+
+    // Whatsapp message
+    const waPhone = '618877686';
+    const waText = encodeURIComponent(`Waxaan labaxay $${amount} waxaan codsanaa in liigu soo diro numer ${number} ama ${evcCrypto}`);
+
+    // Deduct balance
+    balances[currentUser] -= amount;
+    saveAll();
+    updateBalanceDisplay();
+
+    // Open WhatsApp with message
+    window.open(`https://wa.me/${waPhone}?text=${waText}`, '_blank');
+
+    alert('Withdraw waa la diiwaangeliyey, fadlan sug xaqiijinta.');
+
+    // Hide withdraw form
+    withdrawSection.classList.add('hidden');
+
+    // Clear inputs
+    document.getElementById('withdraw-amount').value = '';
+    document.getElementById('withdraw-number').value = '';
+    document.getElementById('withdraw-evc-crypto').value = '';
+  });
+
+  // USSD send
+  ussdSendBtn.addEventListener('click', ()=>{
+    playDeepMusic();
+    const amount = document.getElementById('ussd-amount').value.trim();
+    if(!amount || isNaN(amount) || amount <= 0) return alert('Fadlan geli lacag sax ah.');
+
+    const phone = '618877686';
+    const code = `*712*${phone}*${amount}#`;
+
+    alert(`Wac wicitaanka USSD: ${code}`);
+
+    // Try to call (open tel: link)
+    window.location.href = `tel:${code}`;
+  });
+
+  // Auto redirect if session found on load
+  window.addEventListener('load', ()=>{
+    if(currentUser && users[currentUser]){
+      showSection(dashboardSection);
+      updateBalanceDisplay();
+      startAllTimers();
+      renderRobots();
+    } else {
+      showSection(registerSection);
+    }
+  });
+
+</script>
+
+</body>
+</html>
